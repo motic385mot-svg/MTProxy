@@ -1,6 +1,7 @@
+# Берём минимальный Debian
 FROM debian:bullseye-slim
 
-# Устанавливаем зависимости
+# Устанавливаем сборку
 RUN apt-get update && \
     apt-get install -y build-essential git libssl-dev zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
@@ -8,13 +9,15 @@ RUN apt-get update && \
 # Клонируем MTProxy
 RUN git clone https://github.com/TelegramMessenger/MTProxy.git /MTProxy
 
+# Копируем конфиг и скрипт
+COPY proxy-config.conf /MTProxy/proxy-config.conf
+COPY start.sh /MTProxy/start.sh
+
+# Делаем скрипт исполняемым
+RUN chmod +x /MTProxy/start.sh /MTProxy/mtproto-proxy
+
+# Указываем рабочую директорию
 WORKDIR /MTProxy
 
-# Сборка
-RUN make
-
-# Копируем конфиг
-COPY proxy-config.conf /MTProxy/proxy-config.conf
-
-# Запуск
-CMD ["./objs/bin/mtproto-proxy", "-u", "nobody", "-p", "8888", "-H", "8888", "--aes-pwd", "proxy-config.conf", "--verbosity", "2"]
+# Точка входа
+ENTRYPOINT ["./start.sh"]
