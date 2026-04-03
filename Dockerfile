@@ -1,16 +1,17 @@
+# Берём минимальный образ Debian
 FROM debian:bullseye-slim
 
-# Устанавливаем сборочные инструменты
+# Устанавливаем всё для сборки
 RUN apt-get update && \
     apt-get install -y build-essential git libssl-dev zlib1g-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Клонируем MTProxy
+# Клонируем репозиторий MTProxy
 RUN git clone https://github.com/TelegramMessenger/MTProxy.git /MTProxy
 
 WORKDIR /MTProxy
 
-# Собираем бинарь
+# Сборка бинаря
 RUN make
 
 # Копируем конфиг и скрипт
@@ -20,5 +21,5 @@ COPY start.sh /MTProxy/start.sh
 # Делаем скрипт исполняемым
 RUN chmod +x /MTProxy/start.sh
 
-# Запускаем стартовый скрипт
+# Старт
 ENTRYPOINT ["./start.sh"]
