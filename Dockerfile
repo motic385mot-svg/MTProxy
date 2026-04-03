@@ -12,10 +12,10 @@ RUN git clone https://github.com/TelegramMessenger/MTProxy.git /MTProxy
 # Устанавливаем рабочую директорию
 WORKDIR /MTProxy
 
-# Сборка MTProxy
+# Сборка MTProxy (создает ./mtproto-proxy)
 RUN make
 
-# Копируем конфиг и стартовый скрипт
+# Копируем конфиг и скрипт (можно менять без пересборки)
 COPY proxy-config.conf /MTProxy/proxy-config.conf
 COPY start.sh /MTProxy/start.sh
 
