@@ -1,0 +1,4 @@
+docker run -d \
+  -p 8888:8888 \
+  -e SECRET="твой_секрет_из_proxy-config.conf" \
+  telegrammessenger/mtproxy
